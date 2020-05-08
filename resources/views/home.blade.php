@@ -5,10 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Dashboard</div>
+                <div class="card-header">Administrar notas</div>
 
                 <div class="card-body">
-                
+                    <tareas></tareas>
                 </div>
             </div>
         </div>

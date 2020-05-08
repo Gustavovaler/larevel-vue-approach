@@ -15,7 +15,16 @@ class NotaController extends Controller
      */
     public function index(Request $request)
     {
-       return Nota::where('user_id', auth()->id())->get();
+    //    return Nota::where('user_id', auth()->id())->get();
+        if ($request->ajax()) {
+            $notas = Nota::where('user_id', auth()->id())->get();
+            // foreach ($notas as $nota) {
+            //     $nota['updated_at'] = 'sdfgdfg';
+            // }
+            return $notas;
+        }else{
+            return view('/home');
+        }
     }
 
     /**
@@ -36,11 +45,12 @@ class NotaController extends Controller
      */
     public function store(Request $request)
     {   
+
         $nota = new Nota;
-        $nota->nombre = $request->nombre;
-        $nota->descripcion = $request->descripcion;
+        $nota->nombre = $request->input('nombre');
+        $nota->descripcion = $request->input('descripcion');
         $nota->user_id = auth()->id();
-        $nota.save();
+        $nota->save();
 
         return $nota;
     }
