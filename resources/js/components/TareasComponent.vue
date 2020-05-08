@@ -1,12 +1,23 @@
 <template>
     <div>
+
+        <form @submit.prevent="editarNota" v-if="editandoNota">
+            <h3>Editar nota</h3>
+            <input type="text" placeholder="Nombre" class="form-control mb-2" v-model="nota.nombre">
+             <input type="text" placeholder="Descripcion" class="form-control mb-2" v-model="nota.descripcion">  
+             <button class="btn btn-success" @click="guardarNota">Guardar</button>   
+             <button class="btn btn-warning" @click="cancelarEdicion">Cancelar</button>  
+        </form>
+
+        <form @submit.prevent="agregar" v-else>
         <h3>Agregar notas</h3>
-        <form @submit.prevent="agregar">
             <input type="text" placeholder="Nombre" class="form-control mb-2" v-model="nota.nombre">
              <input type="text" placeholder="Descripcion" class="form-control mb-2" v-model="nota.descripcion">  
              <button class="btn btn-primary" type="submit">Agregar</button>   
 
         </form>
+
+
         <hr class="mt-3">
         <h3>Seccion de notas</h3>
 
@@ -16,6 +27,8 @@
             <span class="badge badge-primary float-right">{{item.updated_at}}</span>
               <p>{{item.nombre}}</p>
               <p>{{item.descripcion}}</p>
+              <button class="btn btn-danger btn-sm" @click="eliminarNota(item, index)">Eliminar</button>
+               <button class="btn btn-secondary btn-sm" @click="editarNota(item, index)">Editar</button>
             </li>
         </ul>
     </div>
@@ -29,6 +42,8 @@ export default {
                 {}
             ],
             nota: {nombre: '', descripcion: ''},
+            editandoNota: false,
+            currentItem: 0,
         }
     },
     created(){
@@ -50,6 +65,32 @@ export default {
             axios.post('/notas', params).then( res => {
                 this.notas.push(res.data);
              })
+        },
+        eliminarNota(item, index){
+            axios.delete(`/notas/${item.id}`).then( () => this.notas.splice(index, 1));
+        },
+        editarNota(item, index){
+            this.editandoNota = true;
+            this.nota.nombre = item.nombre;
+            this.nota.descripcion = item.descripcion;
+            this.currentItem = item.id;
+            
+        },
+        guardarNota(){
+            const params = {nombre: this.nota.nombre, descripcion:  this.nota.descripcion }
+            axios.put(`/notas/${this.currentItem}`, params).then(res  => {
+                this.editandoNota = false;
+            })
+             axios.get('/notas').then( res =>{
+            this.notas = res.data;
+            console.log(res.data);
+        })
+        },
+
+        cancelarEdicion(){
+            this.nota.nombre = '';
+            this.nota.descripcion = '';
+            this.editandoNota = false;
         }
     }
     
