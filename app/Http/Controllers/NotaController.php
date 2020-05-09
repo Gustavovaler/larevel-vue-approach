@@ -13,14 +13,15 @@ class NotaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request)//updated_at->format('d/m/Y  H:i:s')
     {
     //    return Nota::where('user_id', auth()->id())->get();
         if ($request->ajax()) {
             $notas = Nota::where('user_id', auth()->id())->get();
             return $notas;
         }else{
-            return view('/home');
+         
+        return  view('/home');
         }
     }
 
