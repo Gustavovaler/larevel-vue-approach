@@ -31,14 +31,19 @@
               <button class="btn btn-danger btn-sm" @click="eliminarNota(item, index)">Eliminar</button>
                <button class="btn btn-secondary btn-sm" @click="editarNota(item, index)">Editar</button> 
                 <span class="btn btn-outline-success btn-sm" @click="showNota(item)"> Detalles</span>
+                {{numero}}
             </li>
         </ul>
+
+        <button @click="aumentar">Aumentar</button>
        
     </div>
 </template>
 
 <script>
 import  ventana  from "./ModalWindow.vue";
+import { mapState } from 'vuex'
+import { mapMutations } from 'vuex'
 
 export default {
     components: {
@@ -65,6 +70,9 @@ export default {
             this.notas = res.data;
         });
     },
+    computed:{
+        ...mapState(['numero'])
+    },
     methods:{
         agregar(){
             if (this.nota.nombre.trim() === '' || this.nota.descripcion.trim() === '') {
@@ -82,7 +90,10 @@ export default {
                
                 this.notas.push(res.data);
              })
+            
         },
+         ...mapMutations(['aumentar']),
+
         eliminarNota(item, index){
             axios.delete(`/notas/${item.id}`).then( () => this.notas.splice(index, 1));
         },
