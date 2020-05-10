@@ -29,23 +29,10 @@ Vue.component('ventana', require('./components/ModalWindow.vue').default);
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
-
-const store = new Vuex.Store({
-    state:{
-        numero : 20
-
-    }, 
-    mutations:{
-        aumentar(state){
-            state.numero ++
-        }
-    }
-})
-
+import  store from './store.js'
+import router from './router.js'
 const app = new Vue({
     el: '#app',
-    store
+    store,
+    router
 });
